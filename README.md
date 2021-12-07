@@ -73,7 +73,7 @@ This makes it that at least one player goes negative each round cause if you mul
 
 ## Game Play 🃏
 
-## 🌟 I think the video format will be better for understanding the gamplay instead of writing, check [this video](https://youtu.be/aqmiD5RTBkI?t=171)
+## 🌟 I think the video format will be better for understanding the gamplay instead of reading, check [this video](https://youtu.be/aqmiD5RTBkI?t=171)
 
 The player left of the dealer plays the first card into
 the middle.
