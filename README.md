@@ -117,7 +117,7 @@ The standard card deck has 52 cards
 
 1- so the first strategy that the bot will use to defeat my dad is to keep track of what cards that was played and what is still in player's hands so that the bot can decide:
 
-- the approximately the number of tricks he'll bid on
+- approximately the number of tricks he'll bid on
 - wether a particular time is good or not to play a high ranking card based on the cards with the players. 
 
 
