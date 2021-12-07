@@ -3,10 +3,12 @@
 ## What's estimation?
 The card game Estimation is a trick-taking game where you score points by correctly predicting the amount of tricks you will take each round.
 
->🌟 It's a strategy based game that requires a lot of thinking and practising.
+>🌟 It's a strategy based game that requires a lot of thinking, practising and a bit of luck 🍀
 
 ## What'll this bot do?
 Try beating my dad who's considered as a master at this game 😁
+
+# Game Explanation 👨‍🏫
 
 ## Objective 🤔
 Score the most points by correctly predicting how many tricks you’ll take each round.
@@ -73,7 +75,7 @@ This makes it that at least one player goes negative each round cause if you mul
 
 ## Game Play 🃏
 
-## 🌟 I think the video format will be better for understanding the gamplay instead of writing, check [this video](https://youtu.be/aqmiD5RTBkI?t=171)
+## 🌟 I think the video format will be better for understanding the gamplay instead of reading, check [this video](https://youtu.be/aqmiD5RTBkI?t=171)
 
 The player left of the dealer plays the first card into
 the middle.
@@ -115,7 +117,7 @@ The standard card deck has 52 cards
 
 1- so the first strategy that the bot will use to defeat my dad is to keep track of what cards that was played and what is still in player's hands so that the bot can decide:
 
-- the approximately the number of tricks he'll bid on
+- approximately the number of tricks he'll bid on
 - wether a particular time is good or not to play a high ranking card based on the cards with the players. 
 
 
