@@ -123,7 +123,7 @@ The standard card deck has 52 cards
 
 2- still thinking...
 
-# Credits
+# Credits & photos rights
 
 - This [YouTube Tutorial](https://www.youtube.com/watch?v=aqmiD5RTBkI)
 
