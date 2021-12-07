@@ -31,6 +31,8 @@ struct Card {
     rank: Rank,
     suit: Suit,
     is_trump: bool,
+    is_mine: bool,
+    in_player_hands: bool,
 }
 
 impl Card {
@@ -39,7 +41,13 @@ impl Card {
             suit,
             rank,
             is_trump: false,
+            in_player_hands: true,
+            is_mine: false,
         }
+    }
+
+    fn set_as_mine(&mut self) {
+        self.is_mine = true
     }
 
     fn set_as_trump(&mut self) {
