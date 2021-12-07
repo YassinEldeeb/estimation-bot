@@ -8,6 +8,8 @@ The card game Estimation is a trick-taking game where you score points by correc
 ## What'll this bot do?
 Try beating my dad who's considered as a master at this game 😁
 
+# Game Explanation 👨‍🏫
+
 ## Objective 🤔
 Score the most points by correctly predicting how many tricks you’ll take each round.
 
