@@ -150,8 +150,8 @@ fn get_cards_dealt_to_me(cards: &mut Vec<Card>) -> Vec<Card> {
             .position(|&r| r.rank == rank && r.suit == suit)
             .unwrap();
 
-        cards[index.to_owned()].set_as_mine();
-        my_cards.push(cards[index.to_owned()]);
+        cards[index].set_as_mine();
+        my_cards.push(cards[index]);
     }
 
     my_cards
