@@ -1,4 +1,3 @@
-pub use crate::card::*;
 use crate::card::{Card, Rank, Suit};
 use std::io;
 use strum::IntoEnumIterator;
