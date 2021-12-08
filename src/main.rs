@@ -94,8 +94,8 @@ fn get_cards() -> Vec<Card> {
 
 fn get_cards_dealt_to_me(cards: &mut Vec<Card>) -> Vec<Card> {
     // Shorcuts for user input
-    let SUIT_SHORTCUTS: Vec<&str> = Vec::from(["c", "d", "h", "s"]);
-    let RANK_SHORTCUTS: Vec<&str> = Vec::from([
+    let suit_shortcuts: Vec<&str> = Vec::from(["c", "d", "h", "s"]);
+    let rank_shortcuts: Vec<&str> = Vec::from([
         "a", "k", "q", "j", "10", "9", "8", "7", "6", "5", "4", "3", "2",
     ]);
 
@@ -125,7 +125,7 @@ fn get_cards_dealt_to_me(cards: &mut Vec<Card>) -> Vec<Card> {
         for (i, e) in input.split("-").enumerate() {
             // Checking if It's the first [*rank*, suit]
             if i % 2 == 0 {
-                let index = RANK_SHORTCUTS.iter().position(|&r| r == e).unwrap();
+                let index = rank_shortcuts.iter().position(|&r| r == e).unwrap();
 
                 for (i, r) in Rank::iter().enumerate() {
                     if i == index {
@@ -133,7 +133,7 @@ fn get_cards_dealt_to_me(cards: &mut Vec<Card>) -> Vec<Card> {
                     }
                 }
             } else {
-                let index = SUIT_SHORTCUTS.iter().position(|&r| r == e).unwrap();
+                let index = suit_shortcuts.iter().position(|&r| r == e).unwrap();
 
                 for (i, s) in Suit::iter().enumerate() {
                     if i == index {
