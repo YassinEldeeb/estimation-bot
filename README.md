@@ -1,4 +1,4 @@
-# Estimation bot
+# Estimation bot 🤖
 
 ## What's estimation?
 The card game Estimation is a trick-taking game where you score points by correctly predicting the amount of tricks you will take each round.
