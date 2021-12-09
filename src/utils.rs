@@ -11,6 +11,7 @@ pub fn get_cards_from_input(cards: &Vec<Card>) -> Vec<Card> {
 
     let mut input = String::new();
 
+    println!("Example: A-C, 2-D, 10-H, J-S");
     // Sample Input: A-C, 2-D, 10-H
     io::stdin()
         .read_line(&mut input)
@@ -62,7 +63,6 @@ pub fn get_cards_from_input(cards: &Vec<Card>) -> Vec<Card> {
 }
 
 pub fn get_my_cards(cards: &mut Vec<Card>) -> Vec<Card> {
-    println!("Example: A-C, 2-D, 10-H, J-S");
     println!("Enter your cards:");
 
     let mut my_cards = get_cards_from_input(cards);
@@ -76,6 +76,20 @@ pub fn get_my_cards(cards: &mut Vec<Card>) -> Vec<Card> {
     }
 
     my_cards
+}
+
+pub fn set_played_cards(cards: &mut Vec<Card>) {
+    println!("Enter played cards:");
+
+    let mut my_cards = get_cards_from_input(cards);
+
+    for card in cards {
+        for my_card in &mut my_cards {
+            if card.suit == my_card.suit && card.rank == my_card.rank {
+                card.set_as_played();
+            }
+        }
+    }
 }
 
 pub fn set_trump_suit(cards: &mut Vec<Card>, my_cards: &mut Vec<Card>) {
