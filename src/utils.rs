@@ -78,18 +78,43 @@ pub fn get_my_cards(cards: &mut Vec<Card>) -> Vec<Card> {
     my_cards
 }
 
-pub fn set_played_cards(cards: &mut Vec<Card>) {
+pub fn get_played_cards(cards: &mut Vec<Card>) -> Vec<Card> {
     println!("Enter played cards:");
 
-    let mut my_cards = get_cards_from_input(cards);
+    let mut played_cards = get_cards_from_input(cards);
 
     for card in cards {
-        for my_card in &mut my_cards {
-            if card.suit == my_card.suit && card.rank == my_card.rank {
+        for card in &mut played_cards {
+            if card.suit == card.suit && card.rank == card.rank {
                 card.set_as_played();
             }
         }
     }
+
+    played_cards
+}
+
+pub fn estimate_num_of_bids(my_cards: &mut Vec<Card>) -> i32 {
+    let mut bids_num = 0;
+    let mut num_of_trumps = 0;
+
+    for card in my_cards {
+        match card.rank {
+            Rank::Ace => bids_num += 1,
+            Rank::King => bids_num += 1,
+            _ => {}
+        }
+
+        if card.is_trump {
+            num_of_trumps += 1
+        }
+    }
+
+    if num_of_trumps - 3 >= 2 {
+        bids_num += num_of_trumps - 3
+    }
+
+    bids_num
 }
 
 pub fn set_trump_suit(cards: &mut Vec<Card>, my_cards: &mut Vec<Card>) {
