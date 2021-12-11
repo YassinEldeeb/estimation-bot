@@ -1,18 +1,17 @@
-use crate::card::{Card, Rank, Suit};
+use crate::types::{Card, PlayerNum, Rank, Suit, TricksBid};
 use std::io;
 use strum::IntoEnumIterator;
 
 pub fn get_cards_from_input(cards: &Vec<Card>) -> Vec<Card> {
     // Shorcuts for user input
-    let suit_shortcuts: Vec<&str> = Vec::from(["c", "d", "h", "s"]);
-    let rank_shortcuts: Vec<&str> = Vec::from([
+    let suit_shortcuts = Vec::from(["c", "d", "h", "s"]);
+    let rank_shortcuts = Vec::from([
         "a", "k", "q", "j", "10", "9", "8", "7", "6", "5", "4", "3", "2",
     ]);
 
     let mut input = String::new();
 
     println!("Example: A-C, 2-D, 10-H, J-S");
-    // Sample Input: A-C, 2-D, 10-H
     io::stdin()
         .read_line(&mut input)
         .expect("Failed to get your Input!");
@@ -94,6 +93,94 @@ pub fn get_played_cards(cards: &mut Vec<Card>) -> Vec<Card> {
     played_cards
 }
 
+pub fn get_other_players_bids() -> Vec<TricksBid> {
+    let possible_player_input = Vec::from(["p1", "p2", "p3", "p4"]);
+    let mut input = String::new();
+
+    println!("Example: P1:5, P2:2, P3:4");
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Failed to get your Input!");
+
+    let formatted: Vec<String> = input
+        .split(',')
+        .map(|e| e.to_lowercase().trim().to_owned())
+        .collect();
+
+    let mut other_players_bids: Vec<TricksBid> = Vec::new();
+
+    if formatted[0].len() == 0 {
+        println!("Oh, so I'm the first one. Let me think..");
+        return other_players_bids;
+    }
+
+    for input in formatted {
+        let player_bid: Vec<&str> = input.split(":").collect();
+        let tricks_bid: u8 = player_bid[1]
+            .trim()
+            .parse()
+            .expect("Tricks number isn't valid number");
+
+        let mut player_num = PlayerNum::P4;
+
+        let index = possible_player_input
+            .iter()
+            .position(|&r| r == player_bid[0])
+            .unwrap();
+
+        for (i, num) in PlayerNum::iter().enumerate() {
+            if i == index {
+                player_num = num
+            }
+        }
+
+        other_players_bids.push(TricksBid {
+            player_num,
+            tricks_bid,
+        })
+    }
+
+    other_players_bids
+}
+
+pub fn get_player_num() -> PlayerNum {
+    let possible_player_input = Vec::from(["p1", "p2", "p3", "p4"]);
+    let mut input = String::new();
+
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Failed to get your Input!");
+
+    input = input.trim().to_lowercase();
+
+    let index = possible_player_input
+        .iter()
+        .position(|&r| r == input)
+        .unwrap();
+
+    let mut player_num = PlayerNum::P4;
+
+    for (i, value) in PlayerNum::iter().enumerate() {
+        if i == index {
+            player_num = value
+        }
+    }
+
+    player_num
+}
+
+pub fn get_dealer_player_num() -> PlayerNum {
+    println!("Enter the dealer position");
+    println!("Example: P3");
+    get_player_num()
+}
+
+pub fn get_bot_player_num() -> PlayerNum {
+    println!("Enter my position");
+    println!("Example: P1");
+    get_player_num()
+}
+
 pub fn estimate_num_of_bids(my_cards: &mut Vec<Card>) -> i32 {
     let mut bids_num = 0;
     let mut num_of_trumps = 0;
@@ -110,9 +197,8 @@ pub fn estimate_num_of_bids(my_cards: &mut Vec<Card>) -> i32 {
         }
     }
 
-    if num_of_trumps - 3 >= 2 {
-        bids_num += num_of_trumps - 3
-    }
+    // How many bids can we win if we have x amount of trump suited cards
+    // bids_num += ???
 
     bids_num
 }
@@ -120,8 +206,8 @@ pub fn estimate_num_of_bids(my_cards: &mut Vec<Card>) -> i32 {
 pub fn set_trump_suit(cards: &mut Vec<Card>, my_cards: &mut Vec<Card>) {
     let suit_shortcuts: Vec<&str> = Vec::from(["c", "d", "h", "s"]);
 
-    println!("Example: D");
     println!("Enter trump suit:");
+    println!("Example: D");
 
     let mut input = String::new();
 
