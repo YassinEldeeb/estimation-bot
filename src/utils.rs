@@ -93,54 +93,88 @@ pub fn get_played_cards(cards: &mut Vec<Card>) -> Vec<Card> {
     played_cards
 }
 
-pub fn get_other_players_bids() -> Vec<TricksBid> {
+pub fn get_players_bids(my_player_num: PlayerNum) -> Vec<TricksBid> {
     let possible_player_input = Vec::from(["p1", "p2", "p3", "p4"]);
-    let mut input = String::new();
 
-    println!("Example: P1:5, P2:2, P3:4");
-    io::stdin()
-        .read_line(&mut input)
-        .expect("Failed to get your Input!");
+    let mut players_bids: Vec<TricksBid> = Vec::new();
+    let mut already_bidded_players = String::new();
 
-    let formatted: Vec<String> = input
-        .split(',')
-        .map(|e| e.to_lowercase().trim().to_owned())
-        .collect();
+    while players_bids.len() < 4 {
+        let mut input = String::new();
 
-    let mut other_players_bids: Vec<TricksBid> = Vec::new();
-
-    if formatted[0].len() == 0 {
-        println!("Oh, so I'm the first one. Let me think..");
-        return other_players_bids;
-    }
-
-    for input in formatted {
-        let player_bid: Vec<&str> = input.split(":").collect();
-        let tricks_bid: u8 = player_bid[1]
-            .trim()
-            .parse()
-            .expect("Tricks number isn't valid number");
-
-        let mut player_num = PlayerNum::P4;
-
-        let index = possible_player_input
-            .iter()
-            .position(|&r| r == player_bid[0])
-            .unwrap();
-
-        for (i, num) in PlayerNum::iter().enumerate() {
-            if i == index {
-                player_num = num
+        if already_bidded_players.len() == 0 {
+            println!("What did other players bid on?");
+            println!("Example: P1:5, P2:2, P3:4");
+        } else {
+            let mut diff: Vec<&str> = Vec::new();
+            for i in &possible_player_input {
+                // Checking if the player hasn't bidded it
+                // and It's not me (the bot)
+                if !already_bidded_players.contains(i)
+                    && my_player_num.to_string().to_lowercase() != String::from(*i)
+                {
+                    diff.push(i);
+                }
             }
+
+            println!("What did {} bid on?", diff.join(", "));
+        }
+        io::stdin()
+            .read_line(&mut input)
+            .expect("Failed to get your Input!");
+
+        let formatted: Vec<String> = input
+            .split(',')
+            .map(|e| e.to_lowercase().trim().to_owned())
+            .collect();
+
+        if formatted[0].len() == 0 {
+            println!("Oh, so I'm the first one. Let me think..");
+            // Estimate the bids here and push it to the array
+            // Print the estimation for other players
+            continue;
         }
 
-        other_players_bids.push(TricksBid {
-            player_num,
-            tricks_bid,
-        })
+        for i in formatted {
+            let player_bid: Vec<&str> = i.split(":").collect();
+            let tricks_bid: u8 = player_bid[1]
+                .trim()
+                .parse()
+                .expect("Tricks number isn't valid number");
+            let player_name_input = player_bid[0].trim();
+
+            let mut player_num = PlayerNum::P4;
+
+            let index = possible_player_input
+                .iter()
+                .position(|&r| r == player_name_input)
+                .unwrap();
+
+            for (i, num) in PlayerNum::iter().enumerate() {
+                if i == index {
+                    player_num = num
+                }
+            }
+
+            let player_bid_index = already_bidded_players.contains(player_name_input);
+
+            if player_bid_index {
+                println!("{:?} have already bidded before", player_num);
+                continue;
+            }
+
+            already_bidded_players.push_str(player_name_input);
+            if already_bidded_players.len() != 0 {
+                already_bidded_players.push_str(", ");
+            }
+            players_bids.push(TricksBid {
+                player_num,
+                tricks_bid,
+            })
+        }
     }
 
-    other_players_bids
+    players_bids
 }
 
 pub fn get_player_num() -> PlayerNum {
