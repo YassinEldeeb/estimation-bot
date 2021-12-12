@@ -1,5 +1,4 @@
 use std::cmp::PartialEq;
-use std::fmt;
 use strum_macros::EnumIter;
 
 #[derive(Debug, Copy, Clone, EnumIter, PartialEq)]
@@ -27,22 +26,6 @@ pub enum Rank {
     Two,
 }
 
-#[derive(Debug, Copy, Clone, EnumIter, PartialEq)]
-pub enum PlayerNum {
-    P1,
-    P2,
-    P3,
-    P4,
-}
-
-impl fmt::Display for PlayerNum {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{:?}", self)
-        // or, alternatively:
-        // fmt::Debug::fmt(self, f)
-    }
-}
-
 #[derive(Debug, Clone, Copy)]
 pub struct Card {
     pub rank: Rank,
@@ -50,12 +33,6 @@ pub struct Card {
     pub is_trump: bool,
     pub is_mine: bool,
     pub in_player_hands: bool,
-}
-
-#[derive(Debug)]
-pub struct TricksBid {
-    pub player_num: PlayerNum,
-    pub tricks_bid: u8,
 }
 
 impl Card {
