@@ -2,6 +2,8 @@ mod info;
 mod types;
 mod utils;
 
+// !Learn: lifetimes, error handling and the Traits to refactor the codebase
+
 fn main() {
     let mut cards = utils::get_cards();
     // let mut my_cards = utils::get_my_cards(&mut cards);
