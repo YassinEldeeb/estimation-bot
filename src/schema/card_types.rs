@@ -59,11 +59,9 @@ impl Card {
     }
 
     pub fn get_ranking(&self) -> u8 {
-        if self.is_trump {
-            return 100;
-        }
+        let mut ranking;
 
-        match self.rank {
+        ranking = match self.rank {
             Rank::Ace => 14,
             Rank::King => 13,
             Rank::Queen => 12,
@@ -77,6 +75,12 @@ impl Card {
             Rank::Four => 4,
             Rank::Three => 3,
             Rank::Two => 2,
+        };
+
+        if self.is_trump {
+            ranking += 10;
         }
+
+        ranking
     }
 }

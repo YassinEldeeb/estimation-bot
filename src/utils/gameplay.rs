@@ -1,8 +1,7 @@
-use crate::schema::card_types::{Card, Suit};
+pub use super::cards::*;
+use crate::schema::card_types::{Card, Rank, Suit};
 use std::io;
 use strum::IntoEnumIterator;
-
-pub use super::cards::*;
 
 pub fn set_trump_suit(cards: &mut Vec<Card>, my_cards: &mut Vec<Card>) {
     let suit_shortcuts: Vec<&str> = Vec::from(["c", "d", "h", "s"]);
@@ -37,3 +36,15 @@ pub fn set_trump_suit(cards: &mut Vec<Card>, my_cards: &mut Vec<Card>) {
         }
     }
 }
+
+// pub fn bid_on_trump_suit(my_cards: &mut Vec<Card>) -> Suit {
+//     let mut num_of_powerful_cards = 0;
+
+//     for card in my_cards {
+//         match card.rank {
+//             Rank::Ace => num_of_powerful_cards += 1,
+//             Rank::King => num_of_powerful_cards += 1,
+
+//         }
+//     }
+// }

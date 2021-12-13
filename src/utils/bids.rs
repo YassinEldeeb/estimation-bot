@@ -1,27 +1,72 @@
+use crate::info::{MAX_BIDS, NUM_OF_CARDS_IN_EACH_SUIT, NUM_OF_PLAYERS};
 use crate::schema::{bid, card_types::*, player};
+use std::cmp;
 use std::io;
 use strum::IntoEnumIterator;
 
-pub fn estimate(my_cards: &mut Vec<Card>) -> i32 {
-    let mut bids_num = 0;
-    let mut num_of_trumps = 0;
+// Sample: 10-S,8-S,7-S,5-S,4-S,J-H,5-H,3-H,8-C,5-C,2-C,Q-D,10-D
+pub fn estimate(cards: &Vec<Card>, my_cards: &mut Vec<Card>) -> i8 {
+    let mut tricks_bid = 0;
+    let mut num_of_trumps = 0_i8;
 
-    for card in my_cards {
-        match card.rank {
-            Rank::Ace => bids_num += 1,
-            Rank::King => bids_num += 1,
-            _ => {}
+    let mut winning_trumps = 0;
+
+    for my_card in my_cards {
+        match my_card.rank {
+            Rank::Ace => {
+                if my_card.is_trump {
+                    winning_trumps += 1;
+                }
+                tricks_bid += 1
+            }
+            Rank::King => {
+                if my_card.is_trump {
+                    winning_trumps += 1;
+                }
+                tricks_bid += 1
+            }
+            _ => {
+                // Check if there're higher ranking cards in the same suit
+                // Check if I own the higher ranking cards or not
+                let mut is_it_a_winning_card = true;
+
+                for card in cards {
+                    if card.get_ranking() > my_card.get_ranking()
+                        && card.suit == my_card.suit
+                        && !card.is_mine
+                    {
+                        is_it_a_winning_card = false;
+                        break;
+                    }
+                }
+                if is_it_a_winning_card {
+                    if my_card.is_trump {
+                        winning_trumps += 1;
+                    }
+                    tricks_bid += 1;
+                }
+            }
         }
 
-        if card.is_trump {
+        if my_card.is_trump {
             num_of_trumps += 1
         }
     }
 
-    // How many bids can we win if we have x amount of trump suited cards
-    // bids_num += ???
+    // Add tricks bid for trump suits
+    let offset = MAX_BIDS / NUM_OF_PLAYERS;
+    tricks_bid += cmp::max(
+        if num_of_trumps - winning_trumps - (offset - winning_trumps) + winning_trumps
+            > num_of_trumps
+        {
+            num_of_trumps - winning_trumps
+        } else {
+            num_of_trumps - winning_trumps - (offset - winning_trumps)
+        },
+        0,
+    );
 
-    bids_num
+    tricks_bid
 }
 
 pub fn get_players_bids(my_player_num: player::Num) -> Vec<bid::Tricks> {
