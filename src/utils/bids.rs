@@ -2,29 +2,30 @@ use crate::info::{MAX_BIDS, NUM_OF_CARDS_IN_EACH_SUIT, NUM_OF_PLAYERS};
 use crate::schema::{bid, card_types::*, player};
 use std::cmp;
 use std::io;
+use std::iter::Enumerate;
 use strum::IntoEnumIterator;
 
+// ?Note
+// If the cards in a specefic suit were weak
+// and you've a lot of them then Queen & Jack might win
 // Sample: 10-S,8-S,7-S,5-S,4-S,J-H,5-H,3-H,8-C,5-C,2-C,Q-D,10-D
 pub fn estimate(cards: &Vec<Card>, my_cards: &mut Vec<Card>) -> i8 {
     let mut tricks_bid = 0;
     let mut num_of_trumps = 0_i8;
-
     let mut winning_trumps = 0;
+    let mut trumps_offset = 0;
 
     for my_card in my_cards {
+        let mut definetly_winning_card = || {
+            if my_card.is_trump {
+                winning_trumps += 1;
+            }
+            tricks_bid += 1
+        };
+
         match my_card.rank {
-            Rank::Ace => {
-                if my_card.is_trump {
-                    winning_trumps += 1;
-                }
-                tricks_bid += 1
-            }
-            Rank::King => {
-                if my_card.is_trump {
-                    winning_trumps += 1;
-                }
-                tricks_bid += 1
-            }
+            Rank::Ace => definetly_winning_card(),
+            Rank::King => definetly_winning_card(),
             _ => {
                 // Check if there're higher ranking cards in the same suit
                 // Check if I own the higher ranking cards or not
@@ -41,7 +42,17 @@ pub fn estimate(cards: &Vec<Card>, my_cards: &mut Vec<Card>) -> i8 {
                 }
                 if is_it_a_winning_card {
                     if my_card.is_trump {
-                        winning_trumps += 1;
+                        let condition = if trumps_offset < 2 {
+                            my_card.get_ranking() > 16
+                        } else {
+                            true
+                        };
+
+                        if condition {
+                            winning_trumps += 1;
+                        } else {
+                            trumps_offset += 1;
+                        }
                     }
                     tricks_bid += 1;
                 }
@@ -54,14 +65,15 @@ pub fn estimate(cards: &Vec<Card>, my_cards: &mut Vec<Card>) -> i8 {
     }
 
     // Add tricks bid for trump suits
-    let offset = MAX_BIDS / NUM_OF_PLAYERS;
+    // 13 - 8 = 5 / 3 = 2
+    let offset = (NUM_OF_CARDS_IN_EACH_SUIT - num_of_trumps) as f64 / (NUM_OF_PLAYERS - 1) as f64;
+    let offset = offset.round() as i8;
+
     tricks_bid += cmp::max(
-        if num_of_trumps - winning_trumps - (offset - winning_trumps) + winning_trumps
-            > num_of_trumps
-        {
+        if num_of_trumps - (offset - winning_trumps) > num_of_trumps {
             num_of_trumps - winning_trumps
         } else {
-            num_of_trumps - winning_trumps - (offset - winning_trumps)
+            num_of_trumps - winning_trumps - offset
         },
         0,
     );
@@ -117,6 +129,7 @@ pub fn get_players_bids(my_player_num: player::Num) -> Vec<bid::Tricks> {
                 .trim()
                 .parse()
                 .expect("Tricks number isn't valid number");
+
             let player_name_input = player_bid[0].trim();
 
             let mut player_num = player::Num::P4;
@@ -124,7 +137,7 @@ pub fn get_players_bids(my_player_num: player::Num) -> Vec<bid::Tricks> {
             let index = possible_player_input
                 .iter()
                 .position(|&r| r == player_name_input)
-                .unwrap();
+                .expect("Player position isn't invalid");
 
             for (i, num) in player::Num::iter().enumerate() {
                 if i == index {

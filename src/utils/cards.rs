@@ -32,7 +32,10 @@ pub fn get_cards_from_input(cards: &Vec<Card>) -> Vec<Card> {
         for (i, e) in input.split("-").enumerate() {
             // Checking if It's the first [*rank*, suit]
             if i % 2 == 0 {
-                let index = rank_shortcuts.iter().position(|&r| r == e).unwrap();
+                let index = rank_shortcuts
+                    .iter()
+                    .position(|&r| r == e)
+                    .expect("Invalid card rank");
 
                 for (i, r) in Rank::iter().enumerate() {
                     if i == index {
@@ -40,7 +43,10 @@ pub fn get_cards_from_input(cards: &Vec<Card>) -> Vec<Card> {
                     }
                 }
             } else {
-                let index = suit_shortcuts.iter().position(|&r| r == e).unwrap();
+                let index = suit_shortcuts
+                    .iter()
+                    .position(|&r| r == e)
+                    .expect("Invalid card suit");
 
                 for (i, s) in Suit::iter().enumerate() {
                     if i == index {

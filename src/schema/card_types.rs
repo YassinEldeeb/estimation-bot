@@ -8,6 +8,13 @@ pub enum Suit {
     Hearts,
     Spades,
 }
+pub enum Trump {
+    Clubs,
+    Diamonds,
+    Hearts,
+    Spades,
+    NotFound,
+}
 
 #[derive(Debug, Copy, Clone, EnumIter, PartialEq)]
 pub enum Rank {
@@ -33,16 +40,26 @@ pub struct Card {
     pub is_trump: bool,
     pub is_mine: bool,
     pub in_player_hands: bool,
+    pub is_special_suit: bool,
 }
 
 impl Card {
     pub fn new(suit: Suit, rank: Rank) -> Card {
+        let is_special_suit =
+            if rank == Rank::Ace || rank == Rank::King || rank == Rank::Queen || rank == Rank::Jack
+            {
+                true
+            } else {
+                false
+            };
+
         Card {
             suit,
             rank,
             is_trump: false,
             in_player_hands: true,
             is_mine: false,
+            is_special_suit,
         }
     }
 
