@@ -6,7 +6,8 @@ The card game Estimation is a trick-taking game where you score points by correc
 >🌟 It's a strategy based game that requires a lot of thinking, practising and a bit of luck 🍀
 
 ## What'll this bot do?
-Try beating my dad who's considered as a master at this game 😁
+Try beating estimation pro players without machine learning using some maths formulas! 
+>oh god what have I gotten myself into 🤦‍♂️
 
 # Game Explanation 👨‍🏫
 
